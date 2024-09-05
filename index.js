@@ -32,6 +32,9 @@ app.get('/api/sales', async (req, res) => {
         res.status(500).json({ message: 'Error fetching sales', error: err });
     }
 });
+app.get("/", (req, res) => {
+    res.send("Hello World!");
+  });
 
 app.listen(3001, () => {
     console.log("Server is running on port 3001");
