@@ -21,7 +21,7 @@ const saleSchema = new mongoose.Schema({
     age: String
 });
 
-const Sale = mongoose.model('user2', saleSchema); // Maps to the `sales` collection
+const Sale = mongoose.model('user5', saleSchema); // Maps to the `sales` collection
 
 // Step 3: Create Route to Fetch Data from `sales`
 app.get('/api/sales', async (req, res) => {
