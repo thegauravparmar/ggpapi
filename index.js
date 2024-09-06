@@ -1,12 +1,17 @@
+// index.js (or app.js)
+
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+
+const getRoutes = require('./routes/getRoutes'); // Import GET routes
+const postRoutes = require('./routes/postRoutes'); // Import POST routes
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Step 1: Connect to MongoDB
+// Step 1: Connect to MongoDB using the connection string from the .env file
 mongoose.connect('mongodb+srv://organikkanpur:d6fpbA3irM6wQgSC@customerdb.mvlkwaq.mongodb.net/customerDB', {
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -14,28 +19,16 @@ mongoose.connect('mongodb+srv://organikkanpur:d6fpbA3irM6wQgSC@customerdb.mvlkwa
 .then(() => console.log('MongoDB connected'))
 .catch((err) => console.log('Connection failed:', err));
 
-// Step 2: Define a Mongoose Schema and Model for `sales`
-const saleSchema = new mongoose.Schema({
-    name: String,
-    email: String,
-    age: String
-});
+// Step 2: Use the separated routes
+app.use('/api', getRoutes); // Use GET routes under /api
+app.use('/api', postRoutes); // Use POST routes under /api
 
-const Sale = mongoose.model('user5', saleSchema); // Maps to the `sales` collection
-
-// Step 3: Create Route to Fetch Data from `sales`
-app.get('/api/sales', async (req, res) => {
-    try {
-        const sales = await Sale.find(); // Fetch all sales from MongoDB
-        res.json(sales); // Send sales as JSON response
-    } catch (err) {
-        res.status(500).json({ message: 'Error fetching sales', error: err });
-    }
-});
+// Simple Home Route
 app.get("/", (req, res) => {
     res.send("Hello World!");
-  });
+});
 
+// Step 3: Start the Server
 app.listen(3001, () => {
     console.log("Server is running on port 3001");
 });
