@@ -1,12 +1,13 @@
 // routes/getRoutes.js
 const express = require('express');
-const Sale = require('../models/getModels'); // Import your Mongoose model
-
+const Sale = require('../models/postModels'); // Import your Mongoose model
+const apikey = require("./apikeymiddleware");
 const router = express.Router();
 
 // GET route to fetch data
 router.get('/getsales', async (req, res) => {
     try {
+        // apikey(req,res);
         const sales = await Sale.find(); // Fetch all sales from MongoDB
         res.json(sales); // Send sales as JSON response
     } catch (err) {

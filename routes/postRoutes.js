@@ -3,9 +3,10 @@ const express = require('express');
 const Sale = require('../models/postModels'); // Import your Mongoose model
 
 const router = express.Router();
-
+const apikey = require("./apikeymiddleware");
 // POST route to add new data
 router.post('/setsales', async (req, res) => {
+    // apikey(req,res);
     const newSale = new Sale({
         gender: req.body.gender,
         dob: req.body.dob,
