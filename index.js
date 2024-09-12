@@ -9,6 +9,7 @@ const getRoutes = require('./routes/getRoutes'); // Import GET routes
 const postRoutes = require('./routes/postRoutes'); // Import POST routes
 const updateRoutes = require('./routes/updateRoutes'); // Import UPDATE routes
 const deleteRoutes = require('./routes/deleteRoutes'); // Import DELETE routes
+const mailRoutes = require('./routes/mailerroute');
 const uri = process.env.MONGODB_URI;
 
 const app = express();
@@ -28,6 +29,7 @@ app.use("/api",getRoutes); // Use GET routes under /api
 app.use("/api", postRoutes); // Use POST routes under /api
 app.use("/api",updateRoutes);//use UPDATE routes under /api
 app.use("/api",deleteRoutes);//use DELETE routes under /api
+app.use('/api', mailRoutes);
 
 // Simple Home Route
 app.get("/", (req, res) => {
