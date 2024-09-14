@@ -1,9 +1,9 @@
 const express = require('express');
 const Sale = require('../models/postModels'); // Import your Mongoose model
-
+const apiKeyMiddleware =require('./apikeymiddleware')
 const router = express.Router();
 
-router.delete("/delete/:height", async (req, res) => {
+router.delete("/delete/:height",apiKeyMiddleware, async (req, res) => {
     let upheight = req.params.height;
 
     try {

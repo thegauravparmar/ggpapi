@@ -1,11 +1,11 @@
 // routes/postRoutes.js
 const express = require('express');
 const Sale = require('../models/postModels'); // Import your Mongoose model
-
+const apiKeyMiddleware =require('./apikeymiddleware')
 const router = express.Router();
 const apikey = require("./apikeymiddleware");
 // POST route to add new data
-router.post('/setsales', async (req, res) => {
+router.post('/setsales', apiKeyMiddleware, async (req, res) => {
     // apikey(req,res);
     const newSale = new Sale({
         gender: req.body.gender,
@@ -22,7 +22,8 @@ router.post('/setsales', async (req, res) => {
 
     try {
         const savedSale = await newSale.save(); // Save new sale to MongoDB
-        res.status(201).json("Thankyou! Your data has been successfully saved."); // Send saved sale as a response
+        
+        res.status(201).json({message : "Thankyou! Your data has been successfully saved.", object : savedSale}); // Send saved sale as a response
     } catch (err) {
         res.status(500).json({ message: 'Error creating sale', error: err });
     }

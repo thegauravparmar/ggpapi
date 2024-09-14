@@ -1,14 +1,21 @@
-// routes/getRoutes.js
+// Dummy API key list (should come from a database in productionject)
+const validApiKeys = ['12345-abcde', '67890-fghij','ggp-pro-ject'];
 
-// GET route to fetch data
-const apikeyverfy =(req, res, next) => {
-        const apiKey = req.headers['x-api-key'];
-        if (apiKey && apiKey === process.env.API_KEY) {
-       // API key is valid, proceed to the next middleware or route handler
-       return ;
-        } else {
-          res.status(401).json({ error: 'Unauthorized' }); // API key is invalid
-        }
+const apiKeyMiddleware = (req, res, next) => {
+
+    const apiKey = req.header('x-api-key');
+
+    if (!apiKey) {
+        return res.status(403).json({ message: 'API key is required' });
+    }
+
+    // Check if the provided API key is valid
+    if (!validApiKeys.includes(apiKey)) {
+        return res.status(401).json({ message: 'Invalid API key' });
+    }
+
+    // If the API key is valid, allow access
+    next();
 };
 
-module.exports = apikeyverfy;
+module.exports = apiKeyMiddleware;
