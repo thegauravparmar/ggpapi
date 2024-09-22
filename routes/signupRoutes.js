@@ -23,7 +23,7 @@ router.post('/signup', async (req, res) => {
 
     // Save the user to the database
     await user.save();
-    await sendEmail(email, subject.signup, name);
+    await sendEmail(email, "Welcome To Good Gut Family !", name);
     // Create JWT token
     const payload = { user: { id: user.id } };
     jwt.sign(
