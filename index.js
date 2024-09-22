@@ -5,11 +5,15 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv').config();
 
+const postRoutess = require('./routes/postRoutess');
 const getRoutes = require('./routes/getRoutes'); // Import GET routes
 const postRoutes = require('./routes/postRoutes'); // Import POST routes
 const updateRoutes = require('./routes/updateRoutes'); // Import UPDATE routes
 const deleteRoutes = require('./routes/deleteRoutes'); // Import DELETE routes
 const mailRoutes = require('./routes/mailerroute');
+const signupRoutes = require('./routes/signupRoutes') 
+const loginRoutes = require('./routes/loginRoutes') 
+
 const uri = process.env.MONGODB_URI;
 
 const app = express();
@@ -25,11 +29,14 @@ mongoose.connect(uri, {
 .catch((err) => console.log('Connection failed:', err));
 
 // Step 2: Use the separated routes
+app.use("/api",loginRoutes);
+app.use("/api",signupRoutes);
 app.use("/api",getRoutes); // Use GET routes under /api
 app.use("/api", postRoutes); // Use POST routes under /api
 app.use("/api",updateRoutes);//use UPDATE routes under /api
 app.use("/api",deleteRoutes);//use DELETE routes under /api
 app.use('/api', mailRoutes);
+app.use('/api',postRoutess);
 
 // Simple Home Route
 app.get("/", (req, res) => {
