@@ -8,7 +8,7 @@ const router = express.Router();
 const orders = [
   {
     orderId: 1,
-    customerName: 'John Doe',
+    customerName: 'Johny Doe',
     products: [
       { productId: 101, productName: 'Product A', price: 29.99 },
       { productId: 102, productName: 'Product B', price: 39.99 }
