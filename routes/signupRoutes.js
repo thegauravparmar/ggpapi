@@ -6,9 +6,11 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/postModels');
 const sendEmail = require('../mailer'); 
 const subject = require('../common/commonenums');
+const cors = require('./cors')
+
 
 // POST /signup
-router.post('/signup', async (req, res) => {
+router.post('/signup',cors, async (req, res) => {
   const { name, email, password } = req.body;
 
   try {

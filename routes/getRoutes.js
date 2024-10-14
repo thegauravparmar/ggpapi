@@ -3,9 +3,10 @@ const express = require('express');
 const Sale = require('../models/postModels'); // Import your Mongoose model
 const apikey = require("./apikeymiddleware");
 const router = express.Router();
+const cors = require('./cors')
 const apiKeyMiddleware =require('./apikeymiddleware')
 // GET route to fetch data
-router.get('/getsales',apiKeyMiddleware, async (req, res) => {
+router.get('/getsales',cors,apiKeyMiddleware, async (req, res) => {
     try {
         // apikey(req,res);
         const sales = await Sale.find(); // Fetch all sales from MongoDB

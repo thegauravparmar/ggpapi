@@ -4,9 +4,11 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/postModels');
+const cors = require('./cors')
+
 
 // POST /login
-router.post('/login', async (req, res) => {
+router.post('/login',cors, async (req, res) => {
   const { email, password } = req.body;
 
   try {

@@ -2,9 +2,11 @@
 const express = require('express');// Import your Mongoose model
 const apiKeyMiddleware =require('./apikeymiddleware')
 const router = express.Router();
-const validateUser =require('../indexx')
+const validateUser =require('../indexx');
+const cors = require('./cors')
+
 // POST route to add new data
-router.post('/validatecredentials', apiKeyMiddleware, async (req, res) => {
+router.post('/validatecredentials',cors, apiKeyMiddleware, async (req, res) => {
     // apikey(req,res);
     const email=req.body.email;
     const password=req.body.password;

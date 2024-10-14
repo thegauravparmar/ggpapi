@@ -3,9 +3,11 @@ const express = require('express');
 const sendEmail = require('../mailer'); // Import the mailer function
 const apiKeyMiddleware =require('./apikeymiddleware')
 const router = express.Router();
+const cors = require('./cors')
+
 
 // POST route to send an email
-router.post('/send-email',apiKeyMiddleware, async (req, res) => {
+router.post('/send-email',cors,apiKeyMiddleware, async (req, res) => {
     const { email, subject, message } = req.body;
 
     try {

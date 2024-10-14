@@ -1,9 +1,10 @@
 const express = require('express');
 const Sale = require('../models/postModels'); // Import your Mongoose model
-const apiKeyMiddleware =require('./apikeymiddleware')
+const apiKeyMiddleware =require('./apikeymiddleware');
+const cors = require('./cors')
 const router = express.Router();
 
-router.delete("/delete/:id",apiKeyMiddleware, async (req, res) => {
+router.delete("/delete/:id",cors,apiKeyMiddleware, async (req, res) => {
     let id =req.params.id;
 
     try {

@@ -1,9 +1,10 @@
 const express = require('express');
 const Sale = require('../models/postModels'); // Import your Mongoose model
-const apiKeyMiddleware =require('./apikeymiddleware')
+const apiKeyMiddleware =require('./apikeymiddleware');
+const cors = require('./cors')
 const router = express.Router();
 
-router.put("/update/:id",apiKeyMiddleware,async (req, res) => {
+router.put("/update/:id",cors,apiKeyMiddleware,async (req, res) => {
    let updatedBody = req.body;
    let id =req.params.id;
 
