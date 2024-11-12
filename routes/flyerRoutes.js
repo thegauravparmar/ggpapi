@@ -2,6 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const Flyer = require('../models/flyer');
+const apiKeyMiddleware =require('./apikeymiddleware');
 const cors = require('./cors')
 // Route to save or update Image 1 URL
 router.post('/flyer', async (req, res) => {
