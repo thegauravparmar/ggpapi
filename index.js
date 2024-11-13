@@ -25,6 +25,9 @@ const flyerRoutes = require('./routes/flyerRoutes');
 const uri = process.env.MONGODB_URI;
 const numCPUs = os.cpus().length;
 
+const app = express();
+app.use(cors());
+app.use(express.json());
 if (cluster.isMaster) {
     console.log(`Master ${process.pid} is running`);
 
@@ -40,9 +43,7 @@ if (cluster.isMaster) {
     });
 } else {
     // Worker process: set up the Express server and MongoDB connection
-    const app = express();
-    app.use(cors());
-    app.use(express.json());
+
 
     // Step 1: Connect to MongoDB using the connection string from the .env file
     mongoose.connect(uri, {
@@ -79,7 +80,7 @@ if (cluster.isMaster) {
     app.listen(PORT, () => {
         console.log(`Worker ${process.pid} started on port ${PORT}`);
     });
-
-    module.exports = app;
 }
+
+module.exports = app;
 
