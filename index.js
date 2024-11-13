@@ -20,6 +20,9 @@ const getProduct = require('./routes/getProduct');
 const postProduct = require('./routes/postProduct');
 const updateProduct = require('./routes/updateProduct');
 const deleteProduct = require('./routes/deleteProduct');
+const getMealtracker = require('./routes/getMealtracker');
+const postMealtracker = require('./routes/postMealtracker');
+
 
 const uri = process.env.MONGODB_URI;
 
@@ -65,7 +68,10 @@ if (cluster.isMaster) {
     app.use("/api", getProduct);
     app.use("/api", postProduct);
     app.use("/api", updateProduct);
-    app.use("/api", deleteProduct)
+    app.use("/api", deleteProduct);
+    app.use("/api", getMealtracker);
+    app.use("/api", postMealtracker);
+
 
     // Home Route
     app.get("/", (req, res) => {
