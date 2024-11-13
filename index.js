@@ -28,20 +28,20 @@ const numCPUs = os.cpus().length;
 const app = express();
 app.use(cors());
 app.use(express.json());
-if (cluster.isMaster) {
-    console.log(`Master ${process.pid} is running`);
+// if (cluster.isMaster) {
+//     console.log(`Master ${process.pid} is running`);
 
-    // Fork workers for each CPU
-    for (let i = 0; i < numCPUs; i++) {
-        cluster.fork();
-    }
+//     // Fork workers for each CPU
+//     for (let i = 0; i < numCPUs; i++) {
+//         cluster.fork();
+//     }
 
-    // Restart worker if it exits
-    cluster.on('exit', (worker, code, signal) => {
-        console.log(`Worker ${worker.process.pid} died. Starting a new worker...`);
-        cluster.fork();
-    });
-} else {
+//     // Restart worker if it exits
+//     cluster.on('exit', (worker, code, signal) => {
+//         console.log(`Worker ${worker.process.pid} died. Starting a new worker...`);
+//         cluster.fork();
+//     });
+// } else {
     // Worker process: set up the Express server and MongoDB connection
 
 
@@ -80,7 +80,7 @@ if (cluster.isMaster) {
     app.listen(PORT, () => {
         console.log(`Worker ${process.pid} started on port ${PORT}`);
     });
-}
+// }
 
 module.exports = app;
 
