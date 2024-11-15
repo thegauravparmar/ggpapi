@@ -21,6 +21,8 @@ const postProduct = require('./routes/postProduct');
 const updateProduct = require('./routes/updateProduct');
 const deleteProduct = require('./routes/deleteProduct');
 const flyerRoutes = require('./routes/flyerRoutes');
+const faqRoutes = require('./routes/faqRoutes');
+const bodyRoutes = require('./routes/bodydataRoutes');
 
 const uri = process.env.MONGODB_URI;
 
@@ -67,7 +69,9 @@ if (cluster.isMaster) {
     app.use("/api", postProduct);
     app.use("/api", updateProduct);
     app.use("/api", deleteProduct);
-    app.use("/api", flyerRoutes)
+    app.use("/api", flyerRoutes);
+    app.use("/api", faqRoutes);
+    app.use("/api", bodyRoutes)
 
     // Home Route
     app.get("/", (req, res) => {
