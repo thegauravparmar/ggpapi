@@ -25,27 +25,27 @@ const faqRoutes = require('./routes/faqRoutes');
 const bodyRoutes = require('./routes/bodydataRoutes');
 
 const uri = process.env.MONGODB_URI;
-
 const numCPUs = os.cpus().length;
 
-if (cluster.isMaster) {
-    console.log(`Master ${process.pid} is running`);
+const app = express();
+app.use(cors());
+app.use(express.json());
+// if (cluster.isMaster) {
+//     console.log(`Master ${process.pid} is running`);
 
-    // Fork workers for each CPU
-    for (let i = 0; i < numCPUs; i++) {
-        cluster.fork();
-    }
+//     // Fork workers for each CPU
+//     for (let i = 0; i < numCPUs; i++) {
+//         cluster.fork();
+//     }
 
-    // Restart worker if it exits
-    cluster.on('exit', (worker, code, signal) => {
-        console.log(`Worker ${worker.process.pid} died. Starting a new worker...`);
-        cluster.fork();
-    });
-} else {
+//     // Restart worker if it exits
+//     cluster.on('exit', (worker, code, signal) => {
+//         console.log(`Worker ${worker.process.pid} died. Starting a new worker...`);
+//         cluster.fork();
+//     });
+// } else {
     // Worker process: set up the Express server and MongoDB connection
-    const app = express();
-    app.use(cors());
-    app.use(express.json());
+
 
     // Step 1: Connect to MongoDB using the connection string from the .env file
     mongoose.connect(uri, {
@@ -84,4 +84,7 @@ if (cluster.isMaster) {
     app.listen(PORT, () => {
         console.log(`Worker ${process.pid} started on port ${PORT}`);
     });
-}
+// }
+
+module.exports = app;
+
