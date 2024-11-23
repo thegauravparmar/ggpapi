@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const productSchema = new mongoose.Schema({
     image: { type: String, },
     name: { type: String,},
-    originalPrice: { type: Number,},
+    originalPrice: { type: Number},
     discountedPrice: { type: Number,},
     discount: { type: Number,},
     rating: { type: Number,},
