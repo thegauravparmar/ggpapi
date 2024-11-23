@@ -6,7 +6,7 @@ const router = express.Router();
 const cors = require('./cors')
 const apiKeyMiddleware =require('./apikeymiddleware')
 // GET route to fetch data
-router.get('/getsales',cors,apiKeyMiddleware, async (req, res) => {
+router.get('/userinfo',cors,apiKeyMiddleware, async (req, res) => {
     try {
         // apikey(req,res);
         const sales = await Sale.find(); // Fetch all sales from MongoDB

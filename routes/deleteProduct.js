@@ -4,7 +4,7 @@ const apiKeyMiddleware =require('./apikeymiddleware');
 const cors = require('./cors')
 const router = express.Router();
 
-router.delete('/deleteproducts/:id',cors,apiKeyMiddleware, async (req, res) => {
+router.delete('/products/:id',cors,apiKeyMiddleware, async (req, res) => {
     try {
         const product = await Product.findOneAndDelete({ _id: req.params.id });
         if (!product) return res.status(404).json({ message: 'Product not found' });

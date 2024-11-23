@@ -4,11 +4,11 @@ const apiKeyMiddleware =require('./apikeymiddleware');
 const cors = require('./cors')
 const router = express.Router();
 
-router.delete("/delete/:id",cors,apiKeyMiddleware, async (req, res) => {
-    let id =req.params.id;
+router.delete("/userinfo/:email",cors,apiKeyMiddleware, async (req, res) => {
+    let email =req.params.email;
 
     try {
-        const sale = await Sale.deleteOne({ _id: id });
+        const sale = await Sale.deleteOne({ email: email });
         
         if (sale.modifiedCount > 0) {
             res.status(200).json({ object: sale, message: "Document successfully deleted" })

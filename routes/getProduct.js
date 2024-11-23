@@ -5,7 +5,7 @@ const cors = require('./cors')
 const apiKeyMiddleware =require('./apikeymiddleware')
 
 // GET all products
-router.get('/getproducts',cors,apiKeyMiddleware, async (req, res) => {
+router.get('/products',cors,apiKeyMiddleware, async (req, res) => {
     try {
         const products = await Product.find();
         res.json(products);

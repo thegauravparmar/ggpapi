@@ -1,18 +1,18 @@
 const express = require('express');
 const Meal = require('../models/mealModels'); 
 const router = express.Router();
+const cors = require('./cors');
+const apiKeyMiddleware =require('./apikeymiddleware');
 
-router.post('/postmeal', async (req, res) => {
+router.post('/fooditems',cors,apiKeyMiddleware, async (req, res) => {
     const meal = new Meal({
         name: req.body.name,
-        quantity: req.body.quantity,
         kcal: req.body.kcal,
         p: req.body.p,
         c: req.body.c,
         f: req.body.f,
         image: req.body.image,
         isVeg: req.body.isVeg,
-        isSelected: req.body.isSelected,
         mealType: req.body.mealType
     });
 
@@ -24,4 +24,12 @@ router.post('/postmeal', async (req, res) => {
     }
 });
 
+router.get('/fooditems',cors,apiKeyMiddleware, async (req, res) => {
+    try {
+        const meal = await Meal.find();
+        res.json(meal);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
 module.exports = router;

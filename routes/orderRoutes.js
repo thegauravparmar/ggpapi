@@ -27,7 +27,7 @@ const orders = [
 ];
 
 // API to get orders and select specific products
-router.get('/products', (req, res) => {
+router.get('/order', (req, res) => {
   // Extract query parameter if provided (e.g., ?orderId=1)
   const { orderId } = req.query;
 

@@ -21,6 +21,8 @@ const postProduct = require('./routes/postProduct');
 const updateProduct = require('./routes/updateProduct');
 const deleteProduct = require('./routes/deleteProduct');
 const flyerRoutes = require('./routes/flyerRoutes');
+const trackmeal = require('./routes/trackmealcontroller');
+const fooditems =require('./routes/fooditemscontroller');
 
 const uri = process.env.MONGODB_URI;
 const numCPUs = os.cpus().length;
@@ -67,8 +69,9 @@ app.use(express.json());
     app.use("/api", postProduct);
     app.use("/api", updateProduct);
     app.use("/api", deleteProduct);
-    app.use("/api", flyerRoutes)
-
+    app.use("/api", flyerRoutes);
+    app.use("/api", trackmeal);
+    app.use("/api", fooditems);
     // Home Route
     app.get("/", (req, res) => {
         res.send(`Hello from worker ${process.pid}`);

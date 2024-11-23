@@ -5,7 +5,7 @@ const Flyer = require('../models/flyer');
 const apiKeyMiddleware =require('./apikeymiddleware');
 const cors = require('./cors')
 // Route to save or update Image 1 URL
-router.post('/flyer', async (req, res) => {
+router.post('/flyer',cors,apiKeyMiddleware, async (req, res) => {
   try {
 var flyer = new Flyer({
         name : req.body.name,
@@ -22,7 +22,7 @@ var flyer = new Flyer({
 
 
 // Route to fetch saved images
-router.get('/flyer', async (req, res) => {
+router.get('/flyer',cors,apiKeyMiddleware, async (req, res) => {
   try {
     const flyer = await Flyer.find();
     if (!flyer) {

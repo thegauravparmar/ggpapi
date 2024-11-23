@@ -2,7 +2,7 @@ const express = require('express');
 const Product = require('../models/productModels'); 
 const router = express.Router();
 
-router.post('/postproducts', async (req, res) => {
+router.post('/products', async (req, res) => {
     const product = new Product({
         image: req.body.image,
         name: req.body.name,

@@ -4,15 +4,15 @@ const apiKeyMiddleware =require('./apikeymiddleware');
 const cors = require('./cors')
 const router = express.Router();
 
-router.put("/update/:id",cors,apiKeyMiddleware,async (req, res) => {
+router.put("/userinfo/:email",cors,apiKeyMiddleware,async (req, res) => {
    let updatedBody = req.body;
-   let id =req.params.id;
+   let email =req.params.email;
 
     try{
-        const sale = await Sale.updateOne({ _id: id }, { $set:updatedBody})
+        const sale = await Sale.updateOne({ email: email }, { $set:updatedBody})
         if(sale.modifiedCount > 0)
         {
-      res.status(200).json({object: sale,message: "seccesfull updation"})
+      res.status(200).json({object: sale,message: "succesfull updation"})
         }
         else{
             res.status(200).json({object: sale,message: "No updation has done"})  
