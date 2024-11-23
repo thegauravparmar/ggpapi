@@ -7,7 +7,7 @@ const cors = require('./cors');
 const faq = require('../models/faq');
 
 // Route to save or update Image 1 URL
-router.post('/faq', async (req, res) => {
+router.post('/faq',cors.apiKeyMiddleware, async (req, res) => {
   try {
     const faq = new FAQ({
       ques: req.body.ques,
