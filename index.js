@@ -23,6 +23,7 @@ const faqRoutes = require('./routes/faqRoutes');
 const bodyRoutes = require('./routes/bodydataRoutes');
 const trackmeal = require('./routes/trackmealcontroller');
 const fooditems =require('./routes/fooditemscontroller');
+const version =require('./routes/versioncontroller')
 
 const uri = process.env.MONGODB_URI;
 
@@ -57,6 +58,7 @@ app.use(express.json());
     app.use("/api", bodyRoutes);
     app.use("/api", trackmeal);
     app.use("/api", fooditems);
+    app.use("/api",version)
     // Home Route
     app.get("/", (req, res) => {
         res.send(`Hello from worker ${process.pid}`);
