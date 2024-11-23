@@ -3,8 +3,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const cluster = require('cluster');
-const os = require('os');
 require('dotenv').config();
 
 const postRoutess = require('./routes/postRoutess');
@@ -27,29 +25,12 @@ const trackmeal = require('./routes/trackmealcontroller');
 const fooditems =require('./routes/fooditemscontroller');
 
 const uri = process.env.MONGODB_URI;
-const numCPUs = os.cpus().length;
+
 
 const app = express();
 app.use(cors());
 app.use(express.json());
-// if (cluster.isMaster) {
-//     console.log(`Master ${process.pid} is running`);
 
-//     // Fork workers for each CPU
-//     for (let i = 0; i < numCPUs; i++) {
-//         cluster.fork();
-//     }
-
-//     // Restart worker if it exits
-//     cluster.on('exit', (worker, code, signal) => {
-//         console.log(`Worker ${worker.process.pid} died. Starting a new worker...`);
-//         cluster.fork();
-//     });
-// } else {
-    // Worker process: set up the Express server and MongoDB connection
-
-
-    // Step 1: Connect to MongoDB using the connection string from the .env file
     mongoose.connect(uri, {
         useNewUrlParser: true,
         useUnifiedTopology: true
@@ -87,7 +68,7 @@ app.use(express.json());
     app.listen(PORT, () => {
         console.log(`Worker ${process.pid} started on port ${PORT}`);
     });
-// }
+
 
 module.exports = app;
 
