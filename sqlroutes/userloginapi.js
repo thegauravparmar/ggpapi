@@ -2,10 +2,10 @@ const express = require("express"); // Import your Mongoose model
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const sendEmail = require("../mailer");
-const subject = require("../common/commonenums");
 const cors = require("../routes/cors");
 const db = require("../sqlconnection");
 const router = express.Router();
+const logger = require("../logger");
 
 router.post("/users", async (req, res) => {
   try {
@@ -31,10 +31,13 @@ router.post("/users", async (req, res) => {
       [name, email, password, signupdate],
       async (err, result) => {
         if (err) {
-          console.error("Error inserting data:", err);
+          await logger("Error inserting data:" + err + "Time:-" + signupdate);
           return res.status(500).json({ error: "Database error" });
         } else {
           await sendEmail(email, "Welcome To Good Gut Family !", name);
+          await logger(
+            `\n New User has been registered with mail:- ${email} , Time:-${signupdate}`
+          );
         }
         const payload = { user: { id: result.insertId } };
         jwt.sign(

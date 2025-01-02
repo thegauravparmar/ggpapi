@@ -4,6 +4,8 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 require("dotenv").config();
+const swaggerUI = require("swagger-ui-express");
+const swaggerSpec = require("./swagger");
 
 //const postRoutess = require("./routes/postRoutess");
 const getRoutes = require("./routes/getRoutes"); // Import GET routes
@@ -59,6 +61,8 @@ app.use("/api", bodyRoutes);
 app.use("/api", trackmeal);
 app.use("/api", fooditems);
 app.use("/api", version);
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerSpec));
+
 // Home Route
 app.get("/", (req, res) => {
   res.send(`Hello from worker ${process.pid}`);

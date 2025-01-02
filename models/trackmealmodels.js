@@ -10,14 +10,14 @@ const trackmealSchema = new mongoose.Schema(
         meallist: [
           {
             name: { type: String },
-            quantity: { type: String }, //don't want
+            quantity: { type: Number }, //don't want
             kcal: { type: String },
             p: { type: String },
             c: { type: String },
             f: { type: String },
             image: { type: String },
-            isVeg: { type: String },
-            isSelected: { type: String }, //don't want
+            isVeg: { type: Number },
+            isSelected: { type: Boolean }, //don't want
             mealType: { type: String },
           },
         ],
@@ -27,4 +27,4 @@ const trackmealSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("trackmeal", trackmealSchema);
+module.exports = mongoose.model("trackyourmeal", trackmealSchema);
