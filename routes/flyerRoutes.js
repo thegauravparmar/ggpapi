@@ -4,7 +4,6 @@ const router = express.Router();
 const Flyer = require("../models/flyer");
 const apiKeyMiddleware = require("./apikeymiddleware");
 const cors = require("./cors");
-const auth = require("./auth");
 
 // Route to save or update Image 1 URL
 router.post("/flyer", cors, apiKeyMiddleware, async (req, res) => {
@@ -22,7 +21,7 @@ router.post("/flyer", cors, apiKeyMiddleware, async (req, res) => {
 });
 
 // Route to fetch saved images
-router.get("/flyer", auth, cors, apiKeyMiddleware, async (req, res) => {
+router.get("/flyer", cors, apiKeyMiddleware, async (req, res) => {
   try {
     const flyer = await Flyer.find();
     if (!flyer || flyer.length === 0) {
