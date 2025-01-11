@@ -57,7 +57,7 @@ router.post("/signup", async (req, res) => {
           (err, token) => {
             if (err) throw err;
             res.json({
-              message: "User registred successfully",
+              msg: "User registred successfully",
             });
           }
         );
@@ -65,7 +65,7 @@ router.post("/signup", async (req, res) => {
     );
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("Server error");
+    res.status(500).json({ msg: "Server error" });
   }
 });
 
@@ -111,13 +111,13 @@ router.post("/login", cors, async (req, res) => {
         { expiresIn: "1h" },
         (err, token) => {
           if (err) throw err;
-          res.json({ token, userId: results[0].id });
+          res.json({ token });
         }
       );
     });
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("Server error");
+    res.status(500).json({ msg: "Server error" });
   }
 });
 
