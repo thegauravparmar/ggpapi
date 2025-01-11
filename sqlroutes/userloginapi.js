@@ -7,7 +7,7 @@ const db = require("../sqlconnection");
 const router = express.Router();
 const logger = require("../logger");
 
-router.post("/users", async (req, res) => {
+router.post("/signup", async (req, res) => {
   try {
     let { name, email, password } = req.body;
 
