@@ -20,6 +20,16 @@ router.post("/users", async (req, res) => {
         .json({ error: "Name, email, and password are required" });
     }
 
+    const getQuery = "SELECT * FROM UserLogins where email = ?";
+    db.execute(getQuery, [email], (err, results) => {
+      if (err) {
+        console.error("Error fetching users:", err);
+        return res.status(500).json({ error: "Database error" });
+      }
+      if (results.length > 0) {
+        return res.status(400).json({ error: "User Already Registred" });
+      }
+    });
     const signupdate = new Date(); // Current timestamp
 
     // Insert the data into the UserLogins table
@@ -47,8 +57,6 @@ router.post("/users", async (req, res) => {
           (err, token) => {
             if (err) throw err;
             res.json({
-              token,
-              id: result.insertId,
               message: "User registred successfully",
             });
           }
@@ -68,7 +76,6 @@ router.get("/users", async (req, res) => {
       console.error("Error fetching users:", err);
       return res.status(500).json({ error: "Database error" });
     }
-    res.json(results);
   });
 });
 
