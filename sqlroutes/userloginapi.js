@@ -121,4 +121,74 @@ router.post("/login", cors, async (req, res) => {
   }
 });
 
+router.post("/userdata", (req, res) => {
+  const {
+    userId,
+    gender,
+    dob,
+    height,
+    weight,
+    medical,
+    goal,
+    bodyfat,
+    workout,
+    food,
+    occupation,
+  } = req.body;
+
+  const sql = `
+    INSERT INTO User6 (userId, gender, dob, height, weight, medical, goal, bodyfat, workout, food, occupation)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `;
+
+  db.query(
+    sql,
+    [
+      userId,
+      gender,
+      dob,
+      height,
+      weight,
+      medical,
+      goal,
+      bodyfat,
+      workout,
+      food,
+      occupation,
+    ],
+    (err, result) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({ error: "Failed to insert data" });
+      }
+      res.status(201).json({ message: "Data inserted successfully", result });
+    }
+  );
+});
+
+router.patch("/userdata/:userId", (req, res) => {
+  const { userId } = req.params;
+  const updates = req.body;
+
+  const fields = Object.keys(updates)
+    .map((key) => `${key} = ?`)
+    .join(", ");
+
+  const values = Object.values(updates);
+
+  const sql = `
+    UPDATE User6
+    SET ${fields}
+    WHERE userId = ?
+  `;
+
+  db.query(sql, [...values, userId], (err, result) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: "Failed to update data" });
+    }
+    res.status(200).json({ message: "Data updated successfully", result });
+  });
+});
+
 module.exports = router;
