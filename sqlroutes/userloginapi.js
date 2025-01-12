@@ -76,6 +76,8 @@ router.get("/users", async (req, res) => {
     if (err) {
       console.error("Error fetching users:", err);
       return res.status(500).json({ error: "Database error" });
+    } else {
+      res.json({ Users: results });
     }
   });
 });

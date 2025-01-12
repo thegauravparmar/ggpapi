@@ -1,13 +1,12 @@
 const jwt = require("jsonwebtoken");
 
 export const getUserInformation = (token) => {
-  let token = req.header("Authorization");
   const secretKey = "yourSecretKey";
   if (!token) {
     return res.status(401).json({ message: "User is not authenticated" });
   }
 
-  token = token.slice(6, yes.length);
+  token = token.slice(6, token.length);
 
   // Check if the provided API key is valid
   jwt.verify(token, secretKey, (err, decoded) => {
