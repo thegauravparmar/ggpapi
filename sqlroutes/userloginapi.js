@@ -86,7 +86,7 @@ router.post("/login", cors, async (req, res) => {
   const { email, password } = req.body;
   try {
     // Check if the user exists
-    const query = "SELECT id,password FROM UserLogins where email = ?";
+    const query = "SELECT id,password,isActive FROM UserLogins where email = ?";
     db.execute(query, [email], async (err, results) => {
       if (err) {
         console.error("Error fetching users:", err);
@@ -97,6 +97,10 @@ router.post("/login", cors, async (req, res) => {
         return res
           .status(404)
           .json({ msg: "No account found with this email" });
+      }
+
+      if (results[0].isActive == 0) {
+        return res.status(403).json({ msg: "Please activate your account" });
       }
 
       // Check password
@@ -198,6 +202,14 @@ router.post("/userdata", auth, (req, res) => {
       res.status(201).json({ message: "Data inserted successfully", result });
     }
   );
+});
+
+router.get("/version", cors, async (req, res) => {
+  try {
+    res.status(200).json({ version: "1.0.0" }); // Send saved sale as a response
+  } catch (err) {
+    res.status(500).json({ message: "Error fecthing version" });
+  }
 });
 
 module.exports = router;

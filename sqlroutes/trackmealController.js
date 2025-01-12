@@ -19,14 +19,14 @@ router.post("/addmeal", cors, auth, async (req, res) => {
     c,
     f,
     image,
-    isVeg,
+    foodType,
     mealType,
   } = req.body;
 
   const query = `
         INSERT INTO MealByDate (
-          userId, mealDate, mealName, quantity, kcal, p, c, f, image, isVeg, mealType
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+          userId, mealDate, mealName, quantity, kcal, p, c, f, image, foodType, mealType , isSelected
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)
       `;
 
   db.execute(
@@ -86,4 +86,15 @@ router.delete("/trackmeal", cors, auth, (req, res) => {
   });
 });
 
+router.put("/selectmeal", cors, (req, res) => {
+  const { mealId, isSelected } = req.body;
+  const query = "UPDATE MealByDate SET isSelected = ? Where mealId = ?";
+  db.query(query, [mealId, isSelected], (error, result) => {
+    if (error) {
+      res.status(500).json({ msg: "DB Error" });
+    } else {
+      res.status(200).json({ msg: "Meal selected successfully" });
+    }
+  });
+});
 module.exports = router;
