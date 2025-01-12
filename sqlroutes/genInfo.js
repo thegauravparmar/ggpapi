@@ -6,7 +6,7 @@ const logger = require("../logger");
 const auth = require("../routes/auth");
 
 
-app.post('/sleepp', (req, res) => {
+router.post('/sleepp', cors, auth,(req, res) => {
     if (GenInfo.value < 10) {
         GenInfo.value++;
         res.status(200).json({ message: 'Value increased successfully', GenInfo });
@@ -16,7 +16,7 @@ app.post('/sleepp', (req, res) => {
 });
 
 // POST endpoint to decrease the 'value'
-app.post('/sleepn', (req, res) => {
+router.post('/sleepn',cors,auth, (req, res) => {
     if (GenInfo.value > 0) {
         GenInfo.value--;
         res.status(200).json({ message: 'Value decreased successfully', GenInfo });
@@ -26,8 +26,8 @@ app.post('/sleepn', (req, res) => {
 });
 
 router.get("/geninfo", async (req, res) => {
-  const query = "SELECT * FROM GenInfo";
-  db.execute(query, (err, results) => {
+  const query = "SELECT * FROM GenInfo where id = ?";
+  db.execute(query[id], (err, results) => {
     if (err) {
       console.error("Error fetching flyers:", err);
       return res.status(500).json({ error: "Database error" });
@@ -35,3 +35,5 @@ router.get("/geninfo", async (req, res) => {
     res.json(results);
   });
 });
+
+module.exports = router;
