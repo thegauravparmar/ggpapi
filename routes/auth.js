@@ -1,27 +1,17 @@
-// Dummy API key list (should come from a database in productionject)
 const jwt = require("jsonwebtoken");
 
-const auth = (req, res, next) => {
-  let token = req.header("Authorization");
+module.exports = (req, res, next) => {
+  const token = req.header("Authorization")?.replace("Bearer ", "");
   const secretKey = "yourSecretKey";
   if (!token) {
-    return res.status(401).json({ message: "User is not authenticated" });
+    return res.status(401).json({ message: "Access denied" });
   }
 
-  token = token.slice(6, token.length);
-
-  // Check if the provided API key is valid
-  jwt.verify(token, secretKey, (err, decoded) => {
-    if (err) {
-      console.error("Token verification failed:", err);
-      return;
-    }
+  try {
+    const decoded = jwt.verify(token, secretKey);
+    req.userInfo = decoded;
     next();
-    // Now you can access the payload from the decoded object
-  });
-
-  // If the API key is valid, allow access
-  next();
+  } catch (error) {
+    res.status(401).json({ message: "Invalid token" });
+  }
 };
-
-module.exports = auth;

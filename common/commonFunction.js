@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 
-export const getUserInformation = (token) => {
+const getUserInformation = (token) => {
   const secretKey = "yourSecretKey";
   if (!token) {
     return res.status(401).json({ message: "User is not authenticated" });
@@ -10,11 +10,12 @@ export const getUserInformation = (token) => {
 
   // Check if the provided API key is valid
   jwt.verify(token, secretKey, (err, decoded) => {
-    if (err) {
-      console.error("Token verification failed:", err);
-      return;
-    }
-    console.log(decoded);
+    // if (err) {
+    //   console.error("Token verification failed:", err);
+    //   return;
+    // } else {
+    return decoded;
+    //}
     // Now you can access the payload from the decoded object
   });
 };

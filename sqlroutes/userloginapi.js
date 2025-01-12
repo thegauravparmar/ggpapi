@@ -84,7 +84,6 @@ router.get("/users", async (req, res) => {
 
 router.post("/login", cors, async (req, res) => {
   const { email, password } = req.body;
-
   try {
     // Check if the user exists
     const query = "SELECT id,password FROM UserLogins where email = ?";
@@ -111,7 +110,7 @@ router.post("/login", cors, async (req, res) => {
       jwt.sign(
         payload,
         "yourSecretKey", // Replace with your secret key
-        { expiresIn: "1h" },
+        { expiresIn: "10h" },
         (err, token) => {
           if (err) throw err;
           res.json({ token });
@@ -125,8 +124,40 @@ router.post("/login", cors, async (req, res) => {
 });
 
 router.post("/userdata", auth, (req, res) => {
+  const userID = req?.userInfo?.user?.id;
+  console.log(userID);
+  const newQuery = "Select * from UserLogins where id = ?";
+  db.execute(newQuery, [userID], (error, result) => {
+    if (error) {
+      res.status(500).json({ msg: "Database Error" });
+    }
+
+    if (result.length > 0) {
+      const updates = req.body;
+
+      const fields = Object.keys(updates)
+        .map((key) => `${key} = ?`)
+        .join(", ");
+
+      const values = Object.values(updates);
+
+      const sql = `
+        UPDATE UserData
+        SET ${fields}
+        WHERE userId = ?
+      `;
+
+      db.query(sql, [...values, userID], (err, result) => {
+        if (err) {
+          console.error(err);
+          return res.status(500).json({ error: "Failed to update data" });
+        }
+        res.status(200).json({ message: "Data updated successfully", result });
+      });
+    }
+  });
+
   const {
-    userId,
     gender,
     dob,
     height,
@@ -140,14 +171,14 @@ router.post("/userdata", auth, (req, res) => {
   } = req.body;
 
   const sql = `
-    INSERT INTO User6 (userId, gender, dob, height, weight, medical, goal, bodyfat, workout, food, occupation)
+    INSERT INTO UserData (userId, gender, dob, height, weight, medical, goal, bodyfat, workout, food, occupation)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `;
 
   db.query(
     sql,
     [
-      userId,
+      userID,
       gender,
       dob,
       height,
@@ -167,31 +198,6 @@ router.post("/userdata", auth, (req, res) => {
       res.status(201).json({ message: "Data inserted successfully", result });
     }
   );
-});
-
-router.patch("/userdata/:userId", auth, (req, res) => {
-  const { userId } = req.params;
-  const updates = req.body;
-
-  const fields = Object.keys(updates)
-    .map((key) => `${key} = ?`)
-    .join(", ");
-
-  const values = Object.values(updates);
-
-  const sql = `
-    UPDATE User6
-    SET ${fields}
-    WHERE userId = ?
-  `;
-
-  db.query(sql, [...values, userId], (err, result) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ error: "Failed to update data" });
-    }
-    res.status(200).json({ message: "Data updated successfully", result });
-  });
 });
 
 module.exports = router;
