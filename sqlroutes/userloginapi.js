@@ -204,4 +204,12 @@ router.post("/userdata", auth, (req, res) => {
   );
 });
 
+router.get("/version", cors, async (req, res) => {
+  try {
+    res.status(200).json({ version: "1.0.0" }); // Send saved sale as a response
+  } catch (err) {
+    res.status(500).json({ message: "Error fecthing version" });
+  }
+});
+
 module.exports = router;
