@@ -62,7 +62,7 @@ router.post("/addmeal", cors, auth, async (req, res) => {
 router.get("/trackmeal", cors, auth, (req, res) => {
   const { date } = req.body;
   const userID = req?.userInfo?.user?.id;
-  console.log(date);
+
   const query = "Select * from MealByDate Where userId = ? AND mealDate = ?";
 
   db.execute(query, [userID, date], (error, result) => {
@@ -70,6 +70,18 @@ router.get("/trackmeal", cors, auth, (req, res) => {
       res.status(500).json({ msg: "Database error" + error });
     } else {
       res.status(200).json({ meals: result });
+    }
+  });
+});
+
+router.delete("/trackmeal", cors, auth, (req, res) => {
+  const { mealId } = req.body;
+  const query = "DELETE FROM MealByDate WHERE mealId = ?";
+  db.execute(query, [mealId], (error, result) => {
+    if (error) {
+      res.status(500).json({ msg: "Database error" });
+    } else {
+      res.status(200).json({ msg: "Successfully deleted meal" });
     }
   });
 });
