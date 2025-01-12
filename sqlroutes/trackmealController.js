@@ -74,4 +74,16 @@ router.get("/trackmeal", cors, auth, (req, res) => {
   });
 });
 
+router.delete("/trackmeal", cors, auth, (req, res) => {
+  const { mealId } = req.body;
+  const query = "DELETE FROM MealByDate WHERE mealId = ?";
+  db.execute(query, [mealId], (error, result) => {
+    if (error) {
+      res.status(500).json({ msg: "Database error" });
+    } else {
+      res.status(200).json({ msg: "Successfully deleted meal" });
+    }
+  });
+});
+
 module.exports = router;
