@@ -3,9 +3,10 @@ const cors = require("../routes/cors");
 const db = require("../sqlconnection");
 const router = express.Router();
 const logger = require("../logger");
+const auth = require("../routes/auth");
 
 
-  router.post("/faq", async (req, res) => {
+  router.post("/faq", auth, (req, res) => {
     try {
       let { question, answer} = req.body;
   
