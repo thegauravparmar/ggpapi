@@ -1,4 +1,3 @@
-const subject=
-{
-    signup:"Welcome To Good Gut Family !",
-}
+const subject = {
+  signup: "Welcome To Good Gut Family !",
+};

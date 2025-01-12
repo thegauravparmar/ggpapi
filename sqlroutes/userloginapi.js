@@ -6,6 +6,7 @@ const cors = require("../routes/cors");
 const db = require("../sqlconnection");
 const router = express.Router();
 const logger = require("../logger");
+const auth = require("../routes/auth");
 
 router.post("/signup", async (req, res) => {
   try {
@@ -121,7 +122,7 @@ router.post("/login", cors, async (req, res) => {
   }
 });
 
-router.post("/userdata", (req, res) => {
+router.post("/userdata", auth, (req, res) => {
   const {
     userId,
     gender,
@@ -166,7 +167,7 @@ router.post("/userdata", (req, res) => {
   );
 });
 
-router.patch("/userdata/:userId", (req, res) => {
+router.patch("/userdata/:userId", auth, (req, res) => {
   const { userId } = req.params;
   const updates = req.body;
 
