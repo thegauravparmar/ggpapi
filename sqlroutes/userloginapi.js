@@ -93,7 +93,7 @@ router.post("/login", cors, async (req, res) => {
         return res.status(500).json({ error: "Database error" });
       }
 
-      if (!results) {
+      if (results.length == 0) {
         return res
           .status(404)
           .json({ msg: "No account found with this email" });
@@ -125,7 +125,7 @@ router.post("/login", cors, async (req, res) => {
 
 router.post("/userdata", auth, (req, res) => {
   const userID = req?.userInfo?.user?.id;
-  console.log(userID);
+
   const newQuery = "Select * from UserLogins where id = ?";
   db.execute(newQuery, [userID], (error, result) => {
     if (error) {

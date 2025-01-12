@@ -62,7 +62,7 @@ router.post("/addmeal", cors, auth, async (req, res) => {
 router.get("/trackmeal", cors, auth, (req, res) => {
   const { date } = req.body;
   const userID = req?.userInfo?.user?.id;
-  console.log(date);
+
   const query = "Select * from MealByDate Where userId = ? AND mealDate = ?";
 
   db.execute(query, [userID, date], (error, result) => {
