@@ -172,11 +172,12 @@ router.post("/userdata", auth, (req, res) => {
     workout,
     food,
     occupation,
+    onboarded,
   } = req.body;
 
   const sql = `
-    INSERT INTO UserData (userId, gender, dob, height, weight, medical, goal, bodyfat, workout, food, occupation)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    INSERT INTO UserData (userId, gender, dob, height, weight, medical, goal, bodyfat, workout, food, occupation,onboarded)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)
   `;
 
   db.query(
@@ -193,6 +194,7 @@ router.post("/userdata", auth, (req, res) => {
       workout,
       food,
       occupation,
+      onboarded,
     ],
     (err, result) => {
       if (err) {
