@@ -249,40 +249,48 @@ router.post("/verifyuser", cors, apiKeyMiddleware, (req, res) => {
     db.execute(query, [id], (error, result) => {
       if (error) {
         console.error("Database error:", error);
-        return res.status(500).json({ message: "Database error" });
+        return res
+          .status(200)
+          .json({ title: "Sorry", message: "Something Went Wrong" });
       }
 
       if (result.length === 0) {
-        return res.status(404).json({ message: "User not found" });
+        return res.status(200).json({ title: "", message: "User not found" });
       }
 
       const { auth_token, isActive } = result[0];
 
       if (isActive === 1) {
-        return res
-          .status(200)
-          .json({ message: "Your Account is already activated" });
+        return res.status(200).json({
+          title: "Thank You!!!",
+          message: "Your Account is already activated",
+        });
       }
 
       if (auth_token !== token) {
-        return res.status(401).json({ message: "Invalid token" });
+        return res.status(200).json({ title: "", message: "Invalid token" });
       }
 
       const updateQuery = "UPDATE UserLogins SET isActive = 1 WHERE id = ?";
       db.execute(updateQuery, [id], (updateError) => {
         if (updateError) {
           console.error("Update error:", updateError);
-          return res.status(500).json({
+          return res.status(200).json({
+            title: "Sorry",
             message: "Failed to activate account. Please try again later.",
           });
         }
 
-        res.status(200).json({ message: "Your account has been activated" });
+        res.status(200).json({
+          title: "Thank You!!!",
+          message: "Your account has been activated",
+        });
       });
     });
   } catch (error) {
     console.error("Token verification error:", error);
-    res.status(401).json({
+    res.status(200).json({
+      title: "Sorry",
       message: "Token expired or invalid. Please regenerate your token.",
     });
   }
