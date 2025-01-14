@@ -33,6 +33,7 @@ jobs:
         host: s769.use1.mysecurecloudhost.com
         username: gamescr1
         key: ${{ secrets.SSH_KEY }}
+        passphrase: ${{ secrets.SSH_PASSPHRASE }}
         port: 22
         script: |
           source /home/gamescr1/nodevenv/gamescreed.net/ggp/20/bin/activate && cd /home/gamescr1/gamescreed.net/ggp
