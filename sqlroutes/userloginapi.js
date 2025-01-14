@@ -146,10 +146,10 @@ router.post("/login", cors, async (req, res) => {
 router.post("/userdata", auth, (req, res) => {
   const userID = req?.userInfo?.user?.id;
 
-  const newQuery = "Select * from UserLogins where id = ?";
+  const newQuery = "SELECT * FROM UserLogins WHERE id = ?";
   db.execute(newQuery, [userID], (error, result) => {
     if (error) {
-      res.status(500).json({ msg: "Database Error" });
+      return res.status(500).json({ msg: "Database Error" });
     }
 
     if (result.length > 0) {
@@ -172,54 +172,61 @@ router.post("/userdata", auth, (req, res) => {
           console.error(err);
           return res.status(500).json({ error: "Failed to update data" });
         }
-        res.status(200).json({ message: "Data updated successfully", result });
+        return res.status(200).json({ message: "Data updated successfully", result });
       });
+    } else {
+      const {
+        gender,
+        dob,
+        height,
+        weight,
+        medical,
+        goal,
+        bodyfat,
+        workout,
+        food,
+        occupation,
+        onboarded,
+        targetWeight,
+      } = req.body;
+
+      const sql = `
+        INSERT INTO UserData (userId, gender, dob, height, weight, medical, goal, bodyfat, workout, food, occupation, onboarded,targetWeight)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)
+      `;
+
+      db.query(
+        sql,
+        [
+          userID,
+          gender,
+          dob,
+          height,
+          weight,
+          medical,
+          goal,
+          bodyfat,
+          workout,
+          food,
+          occupation,
+          onboarded,
+          targetWeight,
+        ],
+        (err, result) => {
+          if (err) {
+            console.error(err);
+            return res.status(500).json({ error: "Failed to insert data" });
+          }
+          console.log("Sucess");
+          return res.status(201).json({ message: "Data inserted successfully", result });
+          console.log("Sucess");
+        }
+      );
     }
   });
-
-  const {
-    gender,
-    dob,
-    height,
-    weight,
-    medical,
-    goal,
-    bodyfat,
-    workout,
-    food,
-    occupation,
-  } = req.body;
-
-  const sql = `
-    INSERT INTO UserData (userId, gender, dob, height, weight, medical, goal, bodyfat, workout, food, occupation)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `;
-
-  db.query(
-    sql,
-    [
-      userID,
-      gender,
-      dob,
-      height,
-      weight,
-      medical,
-      goal,
-      bodyfat,
-      workout,
-      food,
-      occupation,
-    ],
-    (err, result) => {
-      if (err) {
-        console.error(err);
-        return res.status(500).json({ error: "Failed to insert data" });
-      }
-      res.status(201).json({ message: "Data inserted successfully", result });
-    }
-  );
 });
 
+<<<<<<< HEAD
 router.post("/verifyuser", cors, apiKeyMiddleware, (req, res) => {
   try {
     const { token } = req.body;
@@ -277,6 +284,8 @@ router.post("/verifyuser", cors, apiKeyMiddleware, (req, res) => {
     });
   }
 });
+=======
+>>>>>>> 5587e79b6258962e2df2fa392399ea65f5235dd1
 
 router.get("/version", cors, async (req, res) => {
   try {

@@ -8,7 +8,7 @@ const auth = require("../routes/auth");
 router.get("/usermeta",cors,auth,async (req, res) => {
   const userID = req?.userInfo?.user?.id;
     const query = `
-      SELECT 
+      SELECT
         UserData.*,
         UserLogins.name, UserLogins.email, UserLogins.id
       FROM 
@@ -28,7 +28,7 @@ router.get("/usermeta",cors,auth,async (req, res) => {
         return res.status(404).json({ error: "ID not found" });
       }
   
-      res.json(results);
+      res.json(results[0]);
     });
   });
 

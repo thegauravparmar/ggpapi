@@ -6,6 +6,7 @@ const flyers = require("./sqlroutes/flyer");
 const trackMeal = require("./sqlroutes/trackmealController");
 const faq = require("./sqlroutes/faq");
 const usermeta = require("./sqlroutes/userMeta");
+const geninfo = require("./sqlroutes/genInfo");
 const app = express();
 const port = 3000;
 
@@ -17,6 +18,7 @@ app.use("/api", flyers);
 app.use("/api", faq);
 app.use("/api", trackMeal);
 app.use("/api", usermeta);
+app.use("/api", geninfo);
 
 // Start server
 app.listen(port, () => {
