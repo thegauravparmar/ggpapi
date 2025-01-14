@@ -23,9 +23,9 @@ app.use("/api", trackMeal);
 app.use("/api", usermeta);
 app.use("/api", geninfo);
 const corsOptions = {
-  origin: "*", // Allow all origins
+  origin: "https://www.goodgutproject.in,*", // Allow all origins
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS", // Specify allowed methods
-  allowedHeaders: "Content-Type, Authorization", // Specify allowed headers
+  allowedHeaders: "Content-Type, Authorization, x-api-key", // Specify allowed headers
 };
 
 // Apply CORS globally
