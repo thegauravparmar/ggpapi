@@ -11,6 +11,13 @@ const app = express();
 const port = 3000;
 const cors = require("cors");
 
+app.use(
+  cors({
+    origin: "http://localhost:3000", // Allow requests from your frontend
+    methods: "GET,POST,PUT,DELETE", // Allowed HTTP methods
+    credentials: true, // If sending cookies or authentication tokens
+  })
+);
 // Middleware
 app.use(bodyParser.json()); // Parse JSON bodies
 app.use("/api", userLoginApi); // Use the userLoginApi routes under "/api"
