@@ -9,6 +9,7 @@ const usermeta = require("./sqlroutes/userMeta");
 const geninfo = require("./sqlroutes/genInfo");
 const app = express();
 const port = 3000;
+const { exec } = require('child_process');
 
 // Middleware
 app.use(bodyParser.json()); // Parse JSON bodies
@@ -19,6 +20,16 @@ app.use("/api", faq);
 app.use("/api", trackMeal);
 app.use("/api", usermeta);
 app.use("/api", geninfo);
+
+app.post('/restart', (req, res) => {
+  exec('pm2 restart all', (err, stdout, stderr) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send('Failed to restart app');
+    }
+    res.send('App restarted');
+  });
+});
 
 // Start server
 app.listen(port, () => {
