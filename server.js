@@ -9,6 +9,7 @@ const usermeta = require("./sqlroutes/userMeta");
 const geninfo = require("./sqlroutes/genInfo");
 const app = express();
 const port = 3000;
+const cors = require("cors");
 
 // Middleware
 app.use(bodyParser.json()); // Parse JSON bodies
@@ -19,6 +20,7 @@ app.use("/api", faq);
 app.use("/api", trackMeal);
 app.use("/api", usermeta);
 app.use("/api", geninfo);
+app.use(cors());
 
 // Start server
 app.listen(port, () => {
