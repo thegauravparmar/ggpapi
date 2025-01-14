@@ -7,6 +7,8 @@ const db = require("../sqlconnection");
 const router = express.Router();
 const logger = require("../logger");
 const auth = require("../routes/auth");
+const ggpKey = process.env.GGP_SECRET_KEY;
+const apiKeyMiddleware = require("../routes/apikeymiddleware");
 
 router.post("/signup", async (req, res) => {
   try {
@@ -45,23 +47,37 @@ router.post("/signup", async (req, res) => {
           await logger("Error inserting data:" + err + "Time:-" + signupdate);
           return res.status(500).json({ error: "Database error" });
         } else {
-          await sendEmail(email, "Welcome To Good Gut Family !", name);
-          await logger(
-            `\n New User has been registered with mail:- ${email} , Time:-${signupdate}`
+          const updateQuery =
+            "UPDATE UserLogins SET auth_token = ? WHERE id = ?";
+          const id = result.insertId;
+          const payload = { user: { id: id } };
+          jwt.sign(
+            payload,
+            ggpKey, // Replace with your secret key
+            { expiresIn: "10h" },
+            (err, token) => {
+              if (err) throw err;
+              db.execute(updateQuery, [token, id], async (error, result) => {
+                if (error) {
+                  res.status(500).json({ msg: "Error in creating token" });
+                } else {
+                  await sendEmail(
+                    email,
+                    "Welcome To Good Gut Family !",
+                    name,
+                    token
+                  );
+                  await logger(
+                    `\n New User has been registered with mail:- ${email} , Time:-${signupdate}`
+                  );
+                }
+              });
+              res.json({
+                msg: "User registred successfully",
+              });
+            }
           );
         }
-        const payload = { user: { id: result.insertId } };
-        jwt.sign(
-          payload,
-          "yourSecretKey", // Replace with your secret key
-          { expiresIn: "1h" },
-          (err, token) => {
-            if (err) throw err;
-            res.json({
-              msg: "User registred successfully",
-            });
-          }
-        );
       }
     );
   } catch (err) {
@@ -90,7 +106,7 @@ router.post("/login", cors, async (req, res) => {
     db.execute(query, [email], async (err, results) => {
       if (err) {
         console.error("Error fetching users:", err);
-        return res.status(500).json({ error: "Database error" });
+        return res.status(500).json({ error: "Database error " + err });
       }
 
       if (results.length == 0) {
@@ -99,25 +115,25 @@ router.post("/login", cors, async (req, res) => {
           .json({ msg: "No account found with this email" });
       }
 
-      if (results[0].isActive == 0) {
-        return res.status(403).json({ msg: "Please activate your account" });
-      }
-
       // Check password
       const isMatch = await bcrypt.compare(password, results[0]?.password);
       if (!isMatch) {
         return res.status(401).json({ msg: "Invalid Credentials" });
       }
 
+      if (results[0].isActive == 0) {
+        return res.status(403).json({ msg: "Please activate your account" });
+      }
+
       //Create JWT token
       const payload = { user: { id: results[0]?.id } };
       jwt.sign(
         payload,
-        "yourSecretKey", // Replace with your secret key
+        ggpKey, // Replace with your secret key
         { expiresIn: "10h" },
         (err, token) => {
           if (err) throw err;
-          res.json({ token });
+          res.json({ token, isActive: results[0].isActive });
         }
       );
     });
@@ -202,6 +218,64 @@ router.post("/userdata", auth, (req, res) => {
       res.status(201).json({ message: "Data inserted successfully", result });
     }
   );
+});
+
+router.post("/verifyuser", cors, apiKeyMiddleware, (req, res) => {
+  try {
+    const { token } = req.body;
+
+    if (!token) {
+      return res.status(400).json({ message: "Token is required" });
+    }
+
+    const decoded = jwt.verify(token, ggpKey);
+    const id = decoded?.user?.id;
+
+    if (!id) {
+      return res.status(400).json({ message: "Invalid token payload" });
+    }
+
+    const query = "SELECT auth_token, isActive FROM UserLogins WHERE id = ?";
+    db.execute(query, [id], (error, result) => {
+      if (error) {
+        console.error("Database error:", error);
+        return res.status(500).json({ message: "Database error" });
+      }
+
+      if (result.length === 0) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      const { auth_token, isActive } = result[0];
+
+      if (isActive === 1) {
+        return res
+          .status(200)
+          .json({ message: "Your Account is already activated" });
+      }
+
+      if (auth_token !== token) {
+        return res.status(401).json({ message: "Invalid token" });
+      }
+
+      const updateQuery = "UPDATE UserLogins SET isActive = 1 WHERE id = ?";
+      db.execute(updateQuery, [id], (updateError) => {
+        if (updateError) {
+          console.error("Update error:", updateError);
+          return res.status(500).json({
+            message: "Failed to activate account. Please try again later.",
+          });
+        }
+
+        res.status(200).json({ message: "Your account has been activated" });
+      });
+    });
+  } catch (error) {
+    console.error("Token verification error:", error);
+    res.status(401).json({
+      message: "Token expired or invalid. Please regenerate your token.",
+    });
+  }
 });
 
 router.get("/version", cors, async (req, res) => {
