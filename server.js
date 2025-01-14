@@ -31,6 +31,10 @@ const corsOptions = {
 // Apply CORS globally
 app.use(cors(corsOptions));
 
+app.get("/test", (req, res) => {
+    res.send('App restarted');
+}
+
 // Start server
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
