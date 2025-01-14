@@ -22,7 +22,14 @@ app.use("/api", faq);
 app.use("/api", trackMeal);
 app.use("/api", usermeta);
 app.use("/api", geninfo);
-app.use(cors());
+const corsOptions = {
+  origin: "*", // Allow all origins
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS", // Specify allowed methods
+  allowedHeaders: "Content-Type, Authorization", // Specify allowed headers
+};
+
+// Apply CORS globally
+app.use(cors(corsOptions));
 
 // Start server
 app.listen(port, () => {
