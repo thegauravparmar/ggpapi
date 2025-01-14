@@ -257,7 +257,7 @@ router.post("/verifyuser", cors, apiKeyMiddleware, (req, res) => {
       if (result.length === 0) {
         return res.status(200).json({ title: "", message: "User not found" });
       }
-      const newCon = "tmep";
+      const newCon = "temp";
       const { auth_token, isActive } = result[0];
 
       if (isActive === 1) {
