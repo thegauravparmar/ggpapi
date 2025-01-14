@@ -172,7 +172,9 @@ router.post("/userdata", auth, (req, res) => {
           console.error(err);
           return res.status(500).json({ error: "Failed to update data" });
         }
-        return res.status(200).json({ message: "Data updated successfully", result });
+        return res
+          .status(200)
+          .json({ message: "Data updated successfully", result });
       });
     } else {
       const {
@@ -218,7 +220,9 @@ router.post("/userdata", auth, (req, res) => {
             return res.status(500).json({ error: "Failed to insert data" });
           }
           console.log("Sucess");
-          return res.status(201).json({ message: "Data inserted successfully", result });
+          return res
+            .status(201)
+            .json({ message: "Data inserted successfully", result });
           console.log("Sucess");
         }
       );
@@ -226,7 +230,6 @@ router.post("/userdata", auth, (req, res) => {
   });
 });
 
-<<<<<<< HEAD
 router.post("/verifyuser", cors, apiKeyMiddleware, (req, res) => {
   try {
     const { token } = req.body;
@@ -284,8 +287,6 @@ router.post("/verifyuser", cors, apiKeyMiddleware, (req, res) => {
     });
   }
 });
-=======
->>>>>>> 5587e79b6258962e2df2fa392399ea65f5235dd1
 
 router.get("/version", cors, async (req, res) => {
   try {
