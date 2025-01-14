@@ -1,6 +1,9 @@
 // routes/cors.js
 function cors(req, res, next) {
-  res.setHeader("Access-Control-Allow-Origin", "*"); // Allow all origins or specify your frontend domain
+  res.setHeader(
+    "Access-Control-Allow-Origin",
+    "https://www.goodgutproject.in,*"
+  ); // Allow all origins or specify your frontend domain
   res.setHeader(
     "Access-Control-Allow-Methods",
     "GET, POST, PUT, DELETE, OPTIONS"
