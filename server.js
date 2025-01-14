@@ -30,7 +30,7 @@ app.use("/api", geninfo);
 
 app.use(
   cors({
-    origin: "https://www.goodgutproject.in", // Replace with your client's origin
+    origin: "*", // Replace with your client's origin
     methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE", "OPTIONS"], // Allowed methods
     allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
     credentials: true, // Include cookies if needed
