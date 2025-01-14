@@ -32,7 +32,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 app.get("/test", (req, res) => {
-    res.send('App restarted');
+  res.send("App restarted");
 });
 
 // Start server
