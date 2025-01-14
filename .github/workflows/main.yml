@@ -27,7 +27,14 @@ jobs:
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
 
-    - name: 🔄 Restart Node.js app
-      run: |
-        curl -X POST https://ggp.gamescreed.net/restart
+    - name: 🔄 Restart Node.js App via SSH
+      uses: appleboy/ssh-action@v0.1.4
+      with:
+        host: s769.use1.mysecurecloudhost.com
+        username: gamescr1
+        key: ${{ secrets.SSH_KEY }}
+        port: 22
+        script: |
+          source /home/gamescr1/nodevenv/gamescreed.net/ggp/20/bin/activate && cd /home/gamescr1/gamescreed.net/ggp
+          kill $(ps ax | grep '[n]ode' | awk '{print $1}' | head -n 1)
 
