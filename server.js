@@ -36,6 +36,8 @@ app.use(
     credentials: true, // Include cookies if needed
   })
 );
+
+app.options("*", cors());
 // Apply CORS globally
 //app.use(cors(corsOptions));
 
