@@ -33,7 +33,7 @@ app.use(cors(corsOptions));
 
 app.get("/test", (req, res) => {
     res.send('App restarted');
-}
+});
 
 // Start server
 app.listen(port, () => {
