@@ -22,14 +22,22 @@ app.use("/api", faq);
 app.use("/api", trackMeal);
 app.use("/api", usermeta);
 app.use("/api", geninfo);
-const corsOptions = {
-  origin: "https://www.goodgutproject.in,*", // Allow all origins
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS", // Specify allowed methods
-  allowedHeaders: "Content-Type, Authorization, x-api-key", // Specify allowed headers
-};
+// const corsOptions = {
+//   origin: "https://www.goodgutproject.in,*", // Allow all origins
+//   methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS", // Specify allowed methods
+//   allowedHeaders: "Content-Type, Authorization, x-api-key", // Specify allowed headers
+// };
 
+app.use(
+  cors({
+    origin: "https://www.goodgutproject.in", // Replace with your client's origin
+    methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE", "OPTIONS"], // Allowed methods
+    allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
+    credentials: true, // Include cookies if needed
+  })
+);
 // Apply CORS globally
-app.use(cors(corsOptions));
+//app.use(cors(corsOptions));
 
 app.get("/test", (req, res) => {
   res.send("App restarted");
