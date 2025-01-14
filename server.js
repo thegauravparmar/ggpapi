@@ -21,22 +21,6 @@ app.use("/api", trackMeal);
 app.use("/api", usermeta);
 app.use("/api", geninfo);
 
-app.post('/restart', (req, res) => {
-  exec('pm2 restart all', (err, stdout, stderr) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).send('Failed to restart app');
-    }
-    res.send('App restarted');
-  });
-});
-
-app.get('/restart', (req, res) => {
-  
-    res.send('App restartedsss');
-
-});
-
 // Start server
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
