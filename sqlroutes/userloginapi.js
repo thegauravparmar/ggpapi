@@ -262,7 +262,7 @@ router.post("/verifyuser", cors, apiKeyMiddleware, (req, res) => {
 
       if (isActive === 1) {
         return res.status(200).json({
-          title: "Thank You!!!",
+          title: "Thank You!",
           message: "Your Account is already activated",
         });
       }
@@ -282,7 +282,7 @@ router.post("/verifyuser", cors, apiKeyMiddleware, (req, res) => {
         }
 
         res.status(200).json({
-          title: "Thank You!!!",
+          title: "Thank You!",
           message: "Your account has been activated",
         });
       });
