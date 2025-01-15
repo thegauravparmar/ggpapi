@@ -25,14 +25,14 @@ app.use("/api", geninfo);
 
 app.use(
   cors({
-    origin: "https://www.goodgutproject.in", // Allow this specific origin
+    origin: "*", //"https://www.goodgutproject.in", // Allow this specific origin
     methods: ["GET", "POST", "OPTIONS"], // Allow these methods
     allowedHeaders: ["Content-Type", "Authorization"], // Allow these headers
   })
 );
 
 app.options("*", (req, res) => {
-  res.header("Access-Control-Allow-Origin", "https://www.goodgutproject.in");
+  res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
   res.sendStatus(200);
