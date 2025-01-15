@@ -13,6 +13,23 @@ const port = 3000;
 const { exec } = require("child_process");
 const cors = require("cors");
 
+app.use(
+  cors({
+    origin: ["https://www.goodgutproject.in", "https://goodgutproject.in"]
+  })
+);
+
+// Handle preflight requests (OPTIONS)
+app.options("*", (req, res) => {
+  const allowedOrigins = ["https://www.goodgutproject.in", "https://goodgutproject.in"];
+  const origin = req.headers.origin;
+
+  if (allowedOrigins.includes(origin)) {
+    res.header("Access-Control-Allow-Origin", origin);
+  }
+  res.sendStatus(200);
+});
+
 // Middleware
 app.use(bodyParser.json()); // Parse JSON bodies
 app.use("/api", userLoginApi); // Use the userLoginApi routes under "/api"
@@ -23,20 +40,6 @@ app.use("/api", trackMeal);
 app.use("/api", usermeta);
 app.use("/api", geninfo);
 
-app.use(
-  cors({
-    origin: ["www.goodgutproject.in", "goodgutproject.in"], // Allow this specific origin
-    methods: ["GET", "POST", "OPTIONS"], // Allow these methods
-    allowedHeaders: ["Content-Type", "Authorization"], // Allow these headers
-  })
-);
-
-// app.options("*", (req, res) => {
-//   res.header("Access-Control-Allow-Origin", "https://www.goodgutproject.in");
-//   res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-//   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-//   res.sendStatus(200);
-// });
 
 app.get("/test", (req, res) => {
   res.send("App restartedss");
