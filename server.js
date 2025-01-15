@@ -31,7 +31,12 @@ app.use(
   })
 );
 
-app.options("*", cors());
+app.options("*", (req, res) => {
+  res.header("Access-Control-Allow-Origin", "https://www.goodgutproject.in");
+  res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.sendStatus(200);
+});
 
 app.get("/test", (req, res) => {
   res.send("App restarted");
