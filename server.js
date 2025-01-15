@@ -41,10 +41,6 @@ app.use(cors(corsOptions));
 //   })
 // );
 
-// app.options("*", cors());
-// Apply CORS globally
-//app.use(cors(corsOptions));
-
 app.get("/test", (req, res) => {
   res.send("App restarted");
 });
