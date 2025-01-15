@@ -172,9 +172,12 @@ router.post("/userdata", auth, (req, res) => {
           console.error(err);
           return res.status(500).json({ error: "Failed to update data" });
         }
-        return res
-          .status(200)
-          .json({ message: "Data updated successfully", result });
+
+        if (result.affectedRows > 0) {
+          return res.status(200).json({ message: "Data updated successfully" });
+        } else {
+          return res.status(500).json({ message: "Data Not updated" });
+        }
       });
     } else {
       const {
@@ -221,11 +224,14 @@ router.post("/userdata", auth, (req, res) => {
               .status(500)
               .json({ error: "Failed to insert data" + err });
           }
-          console.log("Sucess");
-          return res
-            .status(201)
-            .json({ message: "Data inserted successfully", result });
-          console.log("Sucess");
+
+          if (result.affectedRows > 0) {
+            return res
+              .status(201)
+              .json({ message: "Data inserted successfully" });
+          } else {
+            return res.status(500).json({ message: "Data not inserted" });
+          }
         }
       );
     }
