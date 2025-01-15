@@ -230,7 +230,7 @@ router.post("/userdata", auth, (req, res) => {
   });
 });
 
-router.post("/verifyuser", cors, apiKeyMiddleware, (req, res) => {
+router.post("/verifyuser", apiKeyMiddleware, (req, res) => {
   try {
     const { token } = req.body;
 
