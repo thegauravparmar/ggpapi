@@ -146,7 +146,7 @@ router.post("/login", cors, async (req, res) => {
 router.post("/userdata", auth, (req, res) => {
   const userID = req?.userInfo?.user?.id;
 
-  const newQuery = "SELECT * FROM UserLogins WHERE id = ?";
+  const newQuery = "SELECT * FROM UserData WHERE userId = ?";
   db.execute(newQuery, [userID], (error, result) => {
     if (error) {
       return res.status(500).json({ msg: "Database Error" });
