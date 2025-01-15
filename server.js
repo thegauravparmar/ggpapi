@@ -23,23 +23,16 @@ app.use("/api", trackMeal);
 app.use("/api", usermeta);
 app.use("/api", geninfo);
 
-const corsOptions = {
-  origin: ["https://www.goodgutproject.in/"], // Frontend URLs
-  // origin: "http://localhost:5173",
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-  credentials: true,
-};
+app.use(
+  cors({
+    origin: "https://www.goodgutproject.in", // Allow this specific origin
+    methods: ["GET", "POST", "OPTIONS"], // Allow these methods
+    allowedHeaders: ["Content-Type", "Authorization"], // Allow these headers
+  })
+);
 
-app.use(cors(corsOptions));
-
-// app.use(
-//   cors({
-//     origin: "*", // Replace with your client's origin
-//     methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE", "OPTIONS"], // Allowed methods
-//     allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
-//     credentials: true, // Include cookies if needed
-//   })
-// );
+// Handle preflight requests
+app.options("*", cors());
 
 app.get("/test", (req, res) => {
   res.send("App restarted");
