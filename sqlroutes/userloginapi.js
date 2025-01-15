@@ -217,7 +217,9 @@ router.post("/userdata", auth, (req, res) => {
         (err, result) => {
           if (err) {
             console.error(err);
-            return res.status(500).json({ error: "Failed to insert data" });
+            return res
+              .status(500)
+              .json({ error: "Failed to insert data" + err });
           }
           console.log("Sucess");
           return res
