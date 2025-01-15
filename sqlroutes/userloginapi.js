@@ -194,7 +194,7 @@ router.post("/userdata", auth, (req, res) => {
 
       const sql = `
         INSERT INTO UserData (userId, gender, dob, height, weight, medical, goal, bodyfat, workout, food, occupation, onboarded,targetWeight)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, true,?)
       `;
 
       db.query(
