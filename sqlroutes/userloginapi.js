@@ -133,7 +133,7 @@ router.post("/login", cors, async (req, res) => {
         { expiresIn: "10h" },
         (err, token) => {
           if (err) throw err;
-          res.json({ token, isActive: results[0].isActive });
+          res.json({ token });
         }
       );
     });
