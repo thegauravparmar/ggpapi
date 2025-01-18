@@ -10,17 +10,36 @@ const geninfo = require("./sqlroutes/genInfo");
 const app = express();
 const port = 3000;
 
-const { exec } = require('child_process');
+const { exec } = require("child_process");
 const cors = require("cors");
-
 
 app.use(
   cors({
-    origin: "http://localhost:3000", // Allow requests from your frontend
-    methods: "GET,POST,PUT,DELETE", // Allowed HTTP methods
-    credentials: true, // If sending cookies or authentication tokens
+    origin: [
+      "https://www.goodgutproject.in",
+      "https://goodgutproject.in",
+      "http://localhost:3000",
+      "https://admindashboard-nu-lovat.vercel.app",
+    ],
   })
 );
+
+// Handle preflight requests (OPTIONS)
+app.options("*", (req, res) => {
+  const allowedOrigins = [
+    "https://www.goodgutproject.in",
+    "https://goodgutproject.in",
+    "http://localhost:3000",
+    "https://admindashboard-nu-lovat.vercel.app",
+  ];
+  const origin = req.headers.origin;
+
+  if (allowedOrigins.includes(origin)) {
+    res.header("Access-Control-Allow-Origin", origin);
+  }
+  res.sendStatus(200);
+});
+
 // Middleware
 app.use(bodyParser.json()); // Parse JSON bodies
 app.use("/api", userLoginApi); // Use the userLoginApi routes under "/api"
@@ -30,7 +49,10 @@ app.use("/api", faq);
 app.use("/api", trackMeal);
 app.use("/api", usermeta);
 app.use("/api", geninfo);
-app.use(cors());
+
+app.get("/test", (req, res) => {
+  res.send("App restartedss");
+});
 
 // Start server
 app.listen(port, () => {

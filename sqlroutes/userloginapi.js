@@ -133,7 +133,7 @@ router.post("/login", cors, async (req, res) => {
         { expiresIn: "10h" },
         (err, token) => {
           if (err) throw err;
-          res.json({ token, isActive: results[0].isActive });
+          res.json({ token });
         }
       );
     });
@@ -146,7 +146,7 @@ router.post("/login", cors, async (req, res) => {
 router.post("/userdata", auth, (req, res) => {
   const userID = req?.userInfo?.user?.id;
 
-  const newQuery = "SELECT * FROM UserLogins WHERE id = ?";
+  const newQuery = "SELECT * FROM UserData WHERE userId = ?";
   db.execute(newQuery, [userID], (error, result) => {
     if (error) {
       return res.status(500).json({ msg: "Database Error" });
@@ -172,9 +172,12 @@ router.post("/userdata", auth, (req, res) => {
           console.error(err);
           return res.status(500).json({ error: "Failed to update data" });
         }
-        return res
-          .status(200)
-          .json({ message: "Data updated successfully", result });
+
+        if (result.affectedRows > 0) {
+          return res.status(200).json({ message: "Data updated successfully" });
+        } else {
+          return res.status(500).json({ message: "Data Not updated" });
+        }
       });
     } else {
       const {
@@ -194,7 +197,7 @@ router.post("/userdata", auth, (req, res) => {
 
       const sql = `
         INSERT INTO UserData (userId, gender, dob, height, weight, medical, goal, bodyfat, workout, food, occupation, onboarded,targetWeight)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, true,?)
       `;
 
       db.query(
@@ -217,20 +220,25 @@ router.post("/userdata", auth, (req, res) => {
         (err, result) => {
           if (err) {
             console.error(err);
-            return res.status(500).json({ error: "Failed to insert data" });
+            return res
+              .status(500)
+              .json({ error: "Failed to insert data" + err });
           }
-          console.log("Sucess");
-          return res
-            .status(201)
-            .json({ message: "Data inserted successfully", result });
-          console.log("Sucess");
+
+          if (result.affectedRows > 0) {
+            return res
+              .status(201)
+              .json({ message: "Data inserted successfully" });
+          } else {
+            return res.status(500).json({ message: "Data not inserted" });
+          }
         }
       );
     }
   });
 });
 
-router.post("/verifyuser", cors, apiKeyMiddleware, (req, res) => {
+router.post("/verifyuser", apiKeyMiddleware, (req, res) => {
   try {
     const { token } = req.body;
 
@@ -249,40 +257,48 @@ router.post("/verifyuser", cors, apiKeyMiddleware, (req, res) => {
     db.execute(query, [id], (error, result) => {
       if (error) {
         console.error("Database error:", error);
-        return res.status(500).json({ message: "Database error" });
+        return res
+          .status(200)
+          .json({ title: "Sorry", message: "Something Went Wrong" });
       }
 
       if (result.length === 0) {
-        return res.status(404).json({ message: "User not found" });
+        return res.status(200).json({ title: "", message: "User not found" });
       }
-
+      const newCon = "temp";
       const { auth_token, isActive } = result[0];
 
       if (isActive === 1) {
-        return res
-          .status(200)
-          .json({ message: "Your Account is already activated" });
+        return res.status(200).json({
+          title: "Thank You!",
+          message: "Your Account is already activated",
+        });
       }
 
       if (auth_token !== token) {
-        return res.status(401).json({ message: "Invalid token" });
+        return res.status(200).json({ title: "", message: "Invalid token" });
       }
 
       const updateQuery = "UPDATE UserLogins SET isActive = 1 WHERE id = ?";
       db.execute(updateQuery, [id], (updateError) => {
         if (updateError) {
           console.error("Update error:", updateError);
-          return res.status(500).json({
+          return res.status(200).json({
+            title: "Sorry",
             message: "Failed to activate account. Please try again later.",
           });
         }
 
-        res.status(200).json({ message: "Your account has been activated" });
+        res.status(200).json({
+          title: "Thank You!",
+          message: "Your account has been activated",
+        });
       });
     });
   } catch (error) {
     console.error("Token verification error:", error);
-    res.status(401).json({
+    res.status(200).json({
+      title: "Sorry",
       message: "Token expired or invalid. Please regenerate your token.",
     });
   }
