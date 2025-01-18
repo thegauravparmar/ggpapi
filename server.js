@@ -18,7 +18,7 @@ app.use(
     origin: [
       "https://www.goodgutproject.in",
       "https://goodgutproject.in",
-      "http://localhost:3000/",
+      "http://localhost:3000",
     ],
   })
 );
@@ -28,7 +28,7 @@ app.options("*", (req, res) => {
   const allowedOrigins = [
     "https://www.goodgutproject.in",
     "https://goodgutproject.in",
-    "http://localhost:3000/",
+    "http://localhost:3000",
   ];
   const origin = req.headers.origin;
 
