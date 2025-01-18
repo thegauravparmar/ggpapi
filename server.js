@@ -15,13 +15,21 @@ const cors = require("cors");
 
 app.use(
   cors({
-    origin: ["https://www.goodgutproject.in", "https://goodgutproject.in"]
+    origin: [
+      "https://www.goodgutproject.in",
+      "https://goodgutproject.in",
+      "http://localhost:3000/",
+    ],
   })
 );
 
 // Handle preflight requests (OPTIONS)
 app.options("*", (req, res) => {
-  const allowedOrigins = ["https://www.goodgutproject.in", "https://goodgutproject.in"];
+  const allowedOrigins = [
+    "https://www.goodgutproject.in",
+    "https://goodgutproject.in",
+    "http://localhost:3000/",
+  ];
   const origin = req.headers.origin;
 
   if (allowedOrigins.includes(origin)) {
@@ -39,7 +47,6 @@ app.use("/api", faq);
 app.use("/api", trackMeal);
 app.use("/api", usermeta);
 app.use("/api", geninfo);
-
 
 app.get("/test", (req, res) => {
   res.send("App restartedss");
