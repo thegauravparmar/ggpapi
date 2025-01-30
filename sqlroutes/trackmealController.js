@@ -97,4 +97,56 @@ router.put("/selectmeal", cors, (req, res) => {
     }
   });
 });
+
+router.post("/addtargetmeal", cors, async (req, res) => {
+  const {
+    userId,
+    mealDate,
+    mealName,
+    quantity,
+    kcal,
+    p,
+    c,
+    f,
+    image,
+    foodType,
+    mealType,
+  } = req.body;
+
+  const query = `
+        INSERT INTO MealByDate (
+          userId, mealDate, mealName, quantity, kcal, p, c, f, image, foodType, mealType , isSelected, isTargetMeal
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 1)
+      `;
+
+  db.execute(
+    query,
+    [
+      userId,
+      mealDate,
+      mealName,
+      quantity,
+      kcal,
+      p,
+      c,
+      f,
+      image,
+      foodType,
+      mealType,
+    ],
+    (error, result) => {
+      if (error) {
+        console.error("Error adding meal:", error);
+        res
+          .status(500)
+          .json({ message: "An error occurred while adding the meal." });
+      } else {
+        res.status(201).json({
+          message: "Meal added successfully",
+        });
+      }
+    }
+  );
+});
+
 module.exports = router;
