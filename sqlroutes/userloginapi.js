@@ -12,8 +12,8 @@ const ggpKey = process.env.GGP_SECRET_KEY;
 //const csecret = process.env.CLIENT_SECRET;
 const apiKeyMiddleware = require("../routes/apikeymiddleware");
 
-const passport = require('passport');
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
+// const passport = require('passport');
+// const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 // // OAuth Google strategy setup
 // passport.use(new GoogleStrategy({
