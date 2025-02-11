@@ -29,7 +29,6 @@ app.use(
     ],
   })
 );
-
 // Handle preflight requests (OPTIONS)
 app.options("*", (req, res) => {
   const allowedOrigins = [
@@ -39,12 +38,13 @@ app.options("*", (req, res) => {
     "https://admindashboard-nu-lovat.vercel.app",
   ];
   const origin = req.headers.origin;
-
   if (allowedOrigins.includes(origin)) {
     res.header("Access-Control-Allow-Origin", origin);
   }
   res.sendStatus(200);
 });
+
+
 
 // Middleware
 app.use(bodyParser.json()); // Parse JSON bodies
