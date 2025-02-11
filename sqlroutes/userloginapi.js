@@ -15,55 +15,55 @@ const apiKeyMiddleware = require("../routes/apikeymiddleware");
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
-// OAuth Google strategy setup
-passport.use(new GoogleStrategy({
-  clientID: cid, // Replace with your Google OAuth client ID
- // clientSecret: csecret, // Replace with your Google OAuth client secret
-  callbackURL: 'https://www.goodgutproject.in/auth/google/callback', // Replace with your callback URL
-}, async (accessToken, refreshToken, profile, done) => {
-  try {
-    // Check if the user already exists in your database
-    const query = "SELECT id, email, isActive FROM UserLogins WHERE email = ?";
-    db.execute(query, [profile.emails[0].value], async (err, results) => {
-      if (err) return done(err);
+// // OAuth Google strategy setup
+// passport.use(new GoogleStrategy({
+// //  clientID: cid, // Replace with your Google OAuth client ID
+//  // clientSecret: csecret, // Replace with your Google OAuth client secret
+//   callbackURL: 'https://www.goodgutproject.in/auth/google/callback', // Replace with your callback URL
+// }, async (accessToken, refreshToken, profile, done) => {
+//   try {
+//     // Check if the user already exists in your database
+//     const query = "SELECT id, email, isActive FROM UserLogins WHERE email = ?";
+//     db.execute(query, [profile.emails[0].value], async (err, results) => {
+//       if (err) return done(err);
 
-      if (results.length > 0) {
-        // Existing user - generate JWT token
-        const user = results[0];
-        if (user.isActive === 0) {
-          return done(null, false, { message: 'Please activate your account' });
-        }
+//       if (results.length > 0) {
+//         // Existing user - generate JWT token
+//         const user = results[0];
+//         if (user.isActive === 0) {
+//           return done(null, false, { message: 'Please activate your account' });
+//         }
 
-        const payload = { user: { id: user.id } };
-        const token = jwt.sign(payload, ggpKey, { expiresIn: '10h' });
-        return done(null, { token });
-      } else {
-        // New user - Create and store user
-        const insertQuery = "INSERT INTO UserLogins (email, isActive) VALUES (?, ?)";
-        db.execute(insertQuery, [profile.emails[0].value, 1], (err, result) => {
-          if (err) return done(err);
+//         const payload = { user: { id: user.id } };
+//         const token = jwt.sign(payload, ggpKey, { expiresIn: '10h' });
+//         return done(null, { token });
+//       } else {
+//         // New user - Create and store user
+//         const insertQuery = "INSERT INTO UserLogins (email, isActive) VALUES (?, ?)";
+//         db.execute(insertQuery, [profile.emails[0].value, 1], (err, result) => {
+//           if (err) return done(err);
 
-          const payload = { user: { id: result.insertId } };
-          const token = jwt.sign(payload, ggpKey, { expiresIn: '10h' });
-          return done(null, { token });
-        });
-      }
-    });
-  } catch (error) {
-    done(error, null);
-  }
-}));
+//           const payload = { user: { id: result.insertId } };
+//           const token = jwt.sign(payload, ggpKey, { expiresIn: '10h' });
+//           return done(null, { token });
+//         });
+//       }
+//     });
+//   } catch (error) {
+//     done(error, null);
+//   }
+// }));
 
-// Google OAuth login route
-router.get('/auth/google', passport.authenticate('google', {
-  scope: ['profile', 'email'],
-}));
+// // Google OAuth login route
+// router.get('/auth/google', passport.authenticate('google', {
+//   scope: ['profile', 'email'],
+// }));
 
-// Google OAuth callback route
-router.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/' }), (req, res) => {
-  // If successful, send the token as the response
-  res.json({ token: req.user.token });
-});
+// // Google OAuth callback route
+// router.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/' }), (req, res) => {
+//   // If successful, send the token as the response
+//   res.json({ token: req.user.token });
+// });
 
 router.post("/signup", async (req, res) => {
   try {
