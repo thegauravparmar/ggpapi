@@ -5,12 +5,12 @@ const router = express.Router();
 const logger = require("../logger");
 const auth = require("../routes/auth");
 
-router.get("/usermeta",cors,auth,async (req, res) => {
+router.get("/usermeta", cors, auth, async (req, res) => {
   const userID = req?.userInfo?.user?.id;
-    const query = `
+  const query = `
       SELECT
         UserData.*,
-        UserLogins.name, UserLogins.email, UserLogins.id
+        UserLogins.name, UserLogins.email
       FROM 
         UserData
       RIGHT JOIN 
@@ -18,18 +18,18 @@ router.get("/usermeta",cors,auth,async (req, res) => {
       WHERE 
         UserLogins.id = ?
     `;
-    db.execute(query, [userID], (err, results) => {
-      if (err) {
-        console.error("Error fetching user metadata:", err);
-        return res.status(500).json({ error: "Database error" });
-      }
-  
-      if (results.length === 0) {
-        return res.status(404).json({ error: "ID not found" });
-      }
-  
-      res.json(results[0]);
-    });
+  db.execute(query, [userID], (err, results) => {
+    if (err) {
+      console.error("Error fetching user metadata:", err);
+      return res.status(500).json({ error: "Database error" });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ error: "ID not found" });
+    }
+
+    res.json(results[0]);
   });
+});
 
 module.exports = router;
